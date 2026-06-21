@@ -17,19 +17,19 @@
 在用户学习工作区中运行：
 
 ```bash
-uv run python {SKILL_DIR}/scripts/convert_source.py ./path/to/file.pdf --workspace "{WORKSPACE}"
+python {SKILL_DIR}/scripts/convert_source.py ./path/to/file.pdf --workspace "{WORKSPACE}"
 ```
 
 可选指定标题：
 
 ```bash
-uv run python {SKILL_DIR}/scripts/convert_source.py ./path/to/file.pdf --title "书名" --workspace "{WORKSPACE}"
+python {SKILL_DIR}/scripts/convert_source.py ./path/to/file.pdf --title "书名" --workspace "{WORKSPACE}"
 ```
 
 处理多个文件：
 
 ```bash
-uv run python {SKILL_DIR}/scripts/convert_source.py file1.pdf file2.docx --workspace "{WORKSPACE}"
+python {SKILL_DIR}/scripts/convert_source.py file1.pdf file2.docx --workspace "{WORKSPACE}"
 ```
 
 脚本会将原始文件复制到 `sources/`，同时生成对应的 `.md` 文件。
@@ -37,13 +37,13 @@ uv run python {SKILL_DIR}/scripts/convert_source.py file1.pdf file2.docx --works
 ### 步骤2：生成 outline
 
 ```bash
-uv run python {SKILL_DIR}/scripts/build_outline.py --workspace "{WORKSPACE}"
+python {SKILL_DIR}/scripts/build_outline.py --workspace "{WORKSPACE}"
 ```
 
 默认处理 `sources/` 目录下所有 `.md` 文件。也可以指定特定文件：
 
 ```bash
-uv run python {SKILL_DIR}/scripts/build_outline.py sources/file1.md sources/file2.md --workspace "{WORKSPACE}"
+python {SKILL_DIR}/scripts/build_outline.py sources/file1.md sources/file2.md --workspace "{WORKSPACE}"
 ```
 
 生成的 `sources/outline.md` 包含章节标题及其在源文件中的行号，格式如：
@@ -61,7 +61,7 @@ uv run python {SKILL_DIR}/scripts/build_outline.py sources/file1.md sources/file
 脚本依赖 PyMuPDF。如果未安装，需要安装：
 
 ```bash
-uv pip install pymupdf
+pip install pymupdf
 ```
 
 ## 基于资料教学

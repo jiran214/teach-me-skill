@@ -81,7 +81,7 @@ your-workspace/
 ## 依赖要求
 
 - Python 3.10+
-- uv（Python 包管理器）
+- PyMuPDF（`pip install pymupdf`）
 
 ## 许可证
 
