@@ -56,14 +56,6 @@ python {SKILL_DIR}/scripts/build_outline.py sources/file1.md sources/file2.md --
 - [第二章 标题](sources/file.md#L50)
 ```
 
-## 依赖
-
-脚本依赖 PyMuPDF。如果未安装，需要安装：
-
-```bash
-pip install pymupdf
-```
-
 ## 基于资料教学
 
 不要仅因为资料库存在就加载全部内容。从 `sources/outline.md` 出发，识别相关章节，通过行号链接读取源文件对应段落。严禁一次性读取整个源文件，始终使用 `Read(source.md, offset, limit)` 按需读取。
