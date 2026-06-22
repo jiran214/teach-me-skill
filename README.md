@@ -70,8 +70,6 @@ your-workspace/
 ├── sources/            # 学习资料源文件
 │   ├── book.md         # 转换后的 Markdown
 │   └── outline.md      # 章节大纲
-├── learning-records/   # 学习记录
-│   └── 0001-slug.md
 └── assets/             # 辅助资产
     ├── images/
     ├── diagrams/
@@ -83,6 +81,10 @@ your-workspace/
 
 - Python 3.10+
 - PyMuPDF（`pip install pymupdf`）
+
+## 参考
+
+本项目基于 [mattpocock/skills](https://github.com/mattpocock/skills/tree/main/skills/productivity/teach) 中的 teach skill 改造而来。
 
 ## 许可证
 

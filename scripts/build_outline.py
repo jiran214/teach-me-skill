@@ -57,7 +57,19 @@ def extract_headings(markdown: str) -> list[HeadingEntry]:
     return entries
 
 
-def build_outline_for_source(source_rel: str, title: str, headings: list[HeadingEntry]) -> list[str]:
+def short_id(index: int) -> str:
+    """将0-based索引转换为短ID: a, b, ..., z, aa, ab, ..."""
+    result = ""
+    n = index
+    while True:
+        result = chr(ord("a") + n % 26) + result
+        n = n // 26 - 1
+        if n < 0:
+            break
+    return result
+
+
+def build_outline_for_source(source_id: str, title: str, headings: list[HeadingEntry]) -> list[str]:
     """为单个源文件生成outline行。"""
     if not headings:
         return []
@@ -68,7 +80,7 @@ def build_outline_for_source(source_rel: str, title: str, headings: list[Heading
 
     for entry in headings:
         indent = "  " * max(entry.level - 1, 0)
-        lines.append(f"{indent}- [{entry.title}]({source_rel}#L{entry.line})")
+        lines.append(f"{indent}- [{entry.title}]({source_id}#L{entry.line})")
 
     lines.append("")
     return lines
@@ -82,9 +94,22 @@ def rebuild_outline(workspace: Path, sources: dict[str, tuple[str, list[HeadingE
     outline_path = workspace / "sources" / "outline.md"
     all_lines: list[str] = []
 
-    for source_rel in sorted(sources):
+    # 生成 YAML frontmatter，包含源文件短ID映射
+    sorted_sources = sorted(sources)
+    id_map: dict[str, str] = {}
+    for i, source_rel in enumerate(sorted_sources):
+        id_map[short_id(i)] = source_rel
+
+    all_lines.append("---")
+    all_lines.append("sources:")
+    for sid in sorted(id_map):
+        all_lines.append(f"  {sid}: {id_map[sid]}")
+    all_lines.append("---")
+    all_lines.append("")
+
+    for i, source_rel in enumerate(sorted_sources):
         title, headings = sources[source_rel]
-        all_lines.extend(build_outline_for_source(source_rel, title, headings))
+        all_lines.extend(build_outline_for_source(short_id(i), title, headings))
 
     outline_path.write_text("\n".join(all_lines).rstrip() + "\n", encoding="utf-8")
 
@@ -115,7 +140,7 @@ def main() -> None:
     if args.files:
         md_files = [Path(f) for f in args.files]
     else:
-        md_files = sorted(sources_dir.glob("*.md"))
+        md_files = sorted(p for p in sources_dir.glob("*.md") if p.name != "outline.md")
         if not md_files:
             fail(f"no markdown files found in {sources_dir}")
 
@@ -131,6 +156,9 @@ def main() -> None:
         headings = extract_headings(markdown)
         sources[source_rel] = (title, headings)
         print(f"indexed {source_rel}: {len(headings)} headings")
+        for entry in headings:
+            indent = "  " * max(entry.level - 1, 0)
+            print(f"  {indent}L{entry.line}: {'#' * entry.level} {entry.title}")
 
     rebuild_outline(workspace, sources)
     print(f"updated sources/outline.md")
